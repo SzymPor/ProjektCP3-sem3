@@ -1,14 +1,11 @@
 #include <iostream>
-
 #include <string>
-
 #include <fstream>
-
 #include <list>
-
 #include <iomanip>
 #include <cstdlib>
 #include <sstream>
+
 
 using namespace std;
 
@@ -48,7 +45,7 @@ int main()
 
     //cout << "Hello there! Welcome to the movie database project!"<<endl;
 
-    cout << "What would you like to do? \n'1'-add a movie, \n'2'-view info about existing movie, \n'3'-delete a movie entry, \n'4'-view a list of existing movies\n";
+    cout << "\nWhat would you like to do? \n'1'-add a movie, \n'2'-view info about existing movie, \n'3'-delete a movie entry, \n'4'-view a list of existing movies\n";
 
     cin >> choice;
 
@@ -223,10 +220,24 @@ int main()
                 }
 
             else{
-                cout<<"Movies already in database:"<<endl;
-                cout << moviefile.rdbuf();
+                   moviefile.seekg(0, ios::end);
+                    if( moviefile.tellg()==0 )
+                        {
+                        moviefile.close();
+                        remove("movielist.txt");
+                        cout<<"Database is empty, you need to add some movies.";
+                        }
+                    else
+                        {
+                        moviefile.open("movielist.txt", ios::in);
+                        moviefile.clear();
+                        moviefile.seekg(0, ios::beg);
+                        cout<<"Movies already in database:"<<endl;
+                        cout << moviefile.rdbuf();
+                        }
 
-            }
+
+                }
 
             moviefile.close();
 
@@ -234,14 +245,11 @@ int main()
         break;
         }
 
-
-        default:
-
-            cout<<"that's not an allowed choice, restart and try again!"<<endl;
+        default: cout<<"that's not an allowed choice, restart and try again!"<<endl;
 
     }
-cout<< "\n\nDo you want to repeat? (y/n):";
-  cin>> repeat;
+    cout<< "\n\nDo you want to repeat? (y/n):";
+    cin>> repeat;
   }
 
     return 0;
