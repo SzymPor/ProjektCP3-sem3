@@ -16,13 +16,14 @@ class Movies{
 public:
 
     string Title;
-
+    string txt=".txt";
     int year=0;
-
     string Actor;
-
     string Description;
-
+    string finalname()
+    {
+    return (Title+txt);
+    }
 };
 
 
@@ -35,18 +36,13 @@ int main()
     char repeat = 'y';
     while( repeat == 'y'){
 
-    string txt=".txt";
-
-    string finalname;
-
     int choice=0;
 
     Movies movie;
 
-    //cout << "Hello there! Welcome to the movie database project!"<<endl;
+
 
     cout << "\nWhat would you like to do? \n'1'-add a movie, \n'2'-view info about existing movie, \n'3'-delete a movie entry, \n'4'-view a list of existing movies\n";
-
     cin >> choice;
 
     cin.ignore();
@@ -65,13 +61,9 @@ int main()
 
             getline (cin, movie.Title);
 
-
-
             fstream moviefile;
 
-            finalname=movie.Title+txt;
-
-            moviefile.open(finalname.c_str(), ios::in); //OPEN MOVIE FILE
+            moviefile.open(movie.finalname().c_str(), ios::in); //OPEN MOVIE FILE
 
 
 
@@ -82,7 +74,7 @@ int main()
             moviefile<<movie.Title<<endl;
             moviefile.close();
 
-            moviefile.open(finalname.c_str(), ios::app);
+            moviefile.open(movie.finalname().c_str(), ios::app);
 
             cout<<"specify release date: ";
 
@@ -148,9 +140,7 @@ int main()
 
             fstream moviefile;
 
-            finalname=movie.Title+txt;
-
-            moviefile.open(finalname.c_str(), ios::in);
+            moviefile.open(movie.finalname().c_str(), ios::in);
 
             if (!moviefile) {
 
@@ -176,8 +166,7 @@ int main()
 
             cout<<"specify movie title to delete: ";
             getline (cin, movie.Title);
-            finalname=movie.Title+txt;
-            if (remove(finalname.c_str()) !=0)
+            if (remove(movie.finalname().c_str()) !=0)
             {
                 perror("error  deleting the file");
             }
