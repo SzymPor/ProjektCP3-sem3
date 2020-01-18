@@ -14,19 +14,31 @@ using namespace std;
 class Movies{
 
 public:
-
     string Title;
+};
+
+class FileName:public Movies{
+
+public:
     string txt=".txt";
-    int year=0;
-    string Actor;
-    string Description;
-    string finalname()
-    {
-    return (Title+txt);
+    string finalname(){
+    return(Title+txt);
     }
 };
 
+class MovieInfo{
+public:
+    int year=0;
+    string Actor;
+    string Description;
+};
 
+class UserDecisions{
+public:
+    int choice=0;
+    int descchoice=0;
+    int NoActors=0;
+};
 
 int main()
 
@@ -36,34 +48,29 @@ int main()
     char repeat = 'y';
     while( repeat == 'y'){
 
-    int choice=0;
+    FileName FName;
+    MovieInfo Info;
+    UserDecisions UD;
 
-    Movies movie;
+    cout << "\nWhat would you like to do? \n'1'-add a movie, \n'2'-view info about existing movie, \n'3'-delete a movie entry, \n'4'-view a list of existing movies, \n'5'-exit program.\n";
 
-
-
-    cout << "\nWhat would you like to do? \n'1'-add a movie, \n'2'-view info about existing movie, \n'3'-delete a movie entry, \n'4'-view a list of existing movies\n";
-    cin >> choice;
+    cin >> UD.choice;
 
     cin.ignore();
 
-    switch(choice){
+    switch(UD.choice){
 
         case 1: //ADD A MOVIE
 
             {
 
-            int descchoice=0;
-
-            int NoActors=0;
-
             cout<<"specify movie title: ";
 
-            getline (cin, movie.Title);
+            getline (cin, FName.Title);
 
             fstream moviefile;
 
-            moviefile.open(movie.finalname().c_str(), ios::in); //OPEN MOVIE FILE
+            moviefile.open(FName.finalname().c_str(), ios::in); //OPEN MOVIE FILE
 
 
 
@@ -71,52 +78,52 @@ int main()
 
             moviefile.close();
             moviefile.open("movielist.txt", ios::app);
-            moviefile<<movie.Title<<endl;
+            moviefile<<FName.Title<<endl;
             moviefile.close();
 
-            moviefile.open(movie.finalname().c_str(), ios::app);
+            moviefile.open(FName.finalname().c_str(), ios::app);
 
             cout<<"specify release date: ";
 
-            cin>>movie.year;
+            cin>>Info.year;
 
-            moviefile<<movie.Title<<" ("<<movie.year<<")"<<endl<<endl;
+            moviefile<<FName.Title<<" ("<<Info.year<<")"<<endl<<endl;
 
             moviefile<<"Actors:"<<endl;
 
             cout<<"How many actors would you like to assign to this movie?"<<endl;
 
-            cin>>NoActors;
+            cin>>UD.NoActors;
 
             cin.ignore();
 
             cout<<"now, type in the names of chosen actors."<<endl;
 
-            for(int i=0; i<NoActors; i++){
+            for(int i=0; i<UD.NoActors; i++){
 
-                getline (cin, movie.Actor);
+                getline (cin, Info.Actor);
 
-                moviefile<<movie.Actor<<endl;
+                moviefile<<Info.Actor<<endl;
 
                 }
 
             cout<<"What about a short description of a movie? (0- no, 1- yes)"<<endl;
 
-            cin>>descchoice;
+            cin>>UD.descchoice;
 
             cin.ignore();
 
-            if(descchoice==1){
+            if(UD.descchoice==1){
 
                 cout<<"type in your description:"<<endl;
 
-                getline (cin, movie.Description);
+                getline (cin, Info.Description);
 
-                moviefile<<"\nSynopsis:\n"<<movie.Description;
+                moviefile<<"\nSynopsis:\n"<<Info.Description;
 
                 }
 
-            else if(descchoice==0){break;}
+            else if(UD.descchoice==0){break;}
 
             else{cout<<"So uncivilized. If you can't read, you probably can't write, so no description!!!11!!11";}
 
@@ -132,25 +139,23 @@ int main()
 
             {
 
-
-
             cout<<"specify movie title: ";
 
-            getline (cin, movie.Title);
+            getline (cin, FName.Title);
 
             fstream moviefile;
 
-            moviefile.open(movie.finalname().c_str(), ios::in);
+            moviefile.open(FName.finalname().c_str(), ios::in);
 
             if (!moviefile) {
 
-                cerr << "Unable to get info, perhaps the archives are incomplete?";
+                cerr << "\nUnable to get info, perhaps the archives are incomplete?";
 
                 }
 
             else{
 
-                cout << moviefile.rdbuf();
+                cout << "\n" << moviefile.rdbuf();
 
             }
 
@@ -165,8 +170,8 @@ int main()
             {
 
             cout<<"specify movie title to delete: ";
-            getline (cin, movie.Title);
-            if (remove(movie.finalname().c_str()) !=0)
+            getline (cin, FName.Title);
+            if (remove(FName.finalname().c_str()) !=0)
             {
                 perror("error  deleting the file");
             }
@@ -182,7 +187,7 @@ int main()
                 }
 
                 ofstream out("temp.txt");
-                del=movie.Title;
+                del=FName.Title;
                 while (getline(in, line))
                 {
                 if (line != del)
@@ -234,6 +239,7 @@ int main()
         break;
         }
 
+        case 5:{return 0;}
         default: cout<<"that's not an allowed choice, restart and try again!"<<endl;
 
     }
