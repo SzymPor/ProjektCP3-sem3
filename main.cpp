@@ -33,7 +33,7 @@ public:
 class UserDecisions{
 public:
     int choice=0;
-    int descchoice=0;
+    char descchoice;
     int NoActors=0;
 };
 
@@ -42,6 +42,7 @@ public:
     string del;
     string line;
     int checktrue=0;
+    int checkactors=0;
 };
 
 
@@ -85,7 +86,11 @@ public:
             cin>>NoActors;
             cin.ignore();
 
-            if(NoActors!=0){
+            checkactors=2;
+
+            while(checkactors>=0){
+
+            if(NoActors>0){
             moviefile<<"Actors:"<<endl;
             cout<<"now, type in the names of chosen actors."<<endl;
 
@@ -94,20 +99,28 @@ public:
                 getline (cin, Actor);
                 moviefile<<Actor<<endl;
                 }
+            checkactors=-2;
+            }
+
+            else if(NoActors==0) {cout<<"No actors added"<<endl<<endl;}
+            else{cout<<"well, how do you suppose to add a negative number of actors? Correct yourself:"<<endl;
+            cin>>NoActors;
+            checkactors=NoActors;
+            NoActors++;}
             }
 
             cout<<"What about a short description of a movie? (0- no, 1- yes)"<<endl;
             cin>>descchoice;
             cin.ignore();
 
-            if(descchoice==1)
+            if(descchoice=='1')
                 {
                 cout<<"type in your description:"<<endl;
                 getline (cin, Description);
                 moviefile<<"\nSynopsis:\n"<<Description;
                 }
 
-            else if(descchoice==0){cout<<"file left without description"<<endl;}
+            else if(descchoice=='0'){cout<<"file left without description"<<endl;}
 
             else{cout<<"So uncivilized. If you can't read, you probably can't write, so no description!!!11!!11";}
             moviefile.close();
