@@ -28,7 +28,6 @@ public:
     int year=0;
     string Actor;
     string Description;
-    //string Genre;
 };
 
 class UserDecisions{
@@ -42,96 +41,90 @@ class TempData{
 public:
     string del;
     string line;
+    int checktrue=0;
 };
 
-int main()
 
-{
-    cout << "Hello there! Welcome to the movie database project!"<<endl;
-
-    char repeat = 'y';
-    while( repeat == 'y'){
-
-    FileName FName;
-    MovieInfo Info;
-    UserDecisions UD;
-    TempData Temp;
-
-    cout << "\nWhat would you like to do? \n'1'-add a movie, \n'2'-view info about existing movie, \n'3'-delete a movie entry, \n'4'-view a list of existing movies, \n'5'-exit program.\n";
-
-    cin >> UD.choice;
-
-    cin.ignore();
-
-    switch(UD.choice){
-
-        case 1: //ADD A MOVIE
-
-            {
+class AddMovie:public FileName, public MovieInfo, public UserDecisions, public TempData{
+public:
+    void AddAMovie(){
             cout<<"specify movie title: ";
-            getline (cin, FName.Title);
+            getline (cin, Title);
 
             fstream moviefile;
-            moviefile.open(FName.finalname().c_str(), ios::in); //OPEN MOVIE FILE
+            moviefile.open(finalname().c_str(), ios::in);
 
             if (!moviefile)
             {
             moviefile.close();
 
             moviefile.open("movielist.txt", ios::app);
-            moviefile<<FName.Title<<endl;
+            moviefile<<Title<<endl;
             moviefile.close();
 
-            moviefile.open(FName.finalname().c_str(), ios::app);
+            moviefile.open(finalname().c_str(), ios::app);
 
-            cout<<"specify release date: ";
-            cin>>Info.year;
+            cout<<"specify release year in [YYYY] format: ";
+            cin>>year;
 
-            moviefile<<FName.Title<<" ("<<Info.year<<")"<<endl<<endl;
+            checktrue=1900;
 
-            moviefile<<"Actors:"<<endl;
+            while(checktrue>1877){
+            if (year>1877){
+            moviefile<<Title<<" ("<<year<<")"<<endl<<endl;
+            checktrue=1200;
+            }
+            else{
+            cout<<"Are you sure about that? First movie ever was created in 1878. Correct yourself:"<<endl;
+            cin>>year;
+            checktrue=year;}
+            }
 
             cout<<"How many actors would you like to assign to this movie?"<<endl;
-            cin>>UD.NoActors;
+
+            cin>>NoActors;
             cin.ignore();
 
+            if(NoActors!=0){
+            moviefile<<"Actors:"<<endl;
             cout<<"now, type in the names of chosen actors."<<endl;
 
-            for(int i=0; i<UD.NoActors; i++)
+            for(int i=0; i<NoActors; i++)
                 {
-                getline (cin, Info.Actor);
-                moviefile<<Info.Actor<<endl;
+                getline (cin, Actor);
+                moviefile<<Actor<<endl;
                 }
+            }
 
             cout<<"What about a short description of a movie? (0- no, 1- yes)"<<endl;
-            cin>>UD.descchoice;
+            cin>>descchoice;
             cin.ignore();
 
-            if(UD.descchoice==1)
+            if(descchoice==1)
                 {
                 cout<<"type in your description:"<<endl;
-                getline (cin, Info.Description);
-                moviefile<<"\nSynopsis:\n"<<Info.Description;
+                getline (cin, Description);
+                moviefile<<"\nSynopsis:\n"<<Description;
                 }
 
-            else if(UD.descchoice==0){break;}
+            else if(descchoice==0){cout<<"file left without description"<<endl;}
 
             else{cout<<"So uncivilized. If you can't read, you probably can't write, so no description!!!11!!11";}
             moviefile.close();
             }
 
             else{cout<<"file already exists, you can view info about it by selecting '2'";}
+}
+};
 
-            break;
-            }
-        case 2: //VIEW INFO
-
-            {
+class ViewInfo: public FileName{
+public:
+    void ViewMovieInfo(){
             cout<<"specify movie title: ";
-            getline (cin, FName.Title);
+            getline (cin, Title);
 
             fstream moviefile;
-            moviefile.open(FName.finalname().c_str(), ios::in);
+            moviefile.open(finalname().c_str(), ios::in);
 
             if (!moviefile)
                 {
@@ -144,17 +137,16 @@ int main()
                 }
 
             moviefile.close();
+    }
+};
 
-        break;
-            }
-
-        case 3: //DELETE ENTRY
-
-            {
+class Delete:public FileName, public TempData{
+public:
+    void DeleteEntry(){
             cout<<"specify movie title to delete: ";
-            getline (cin, FName.Title);
+            getline (cin, Title);
 
-            if (remove(FName.finalname().c_str()) !=0)
+            if (remove(finalname().c_str()) !=0)
                 {
                 perror("error  deleting the file");
                 }
@@ -169,12 +161,12 @@ int main()
                 }
 
                 ofstream out("temp.txt");
-                Temp.del=FName.Title;
+                del=Title;
 
-                while (getline(in, Temp.line))
+                while (getline(in, line))
                 {
-                if (Temp.line != Temp.del)
-                cout << Temp.line << endl;
+                if (line != del)
+                out << line << endl;
                 }
 
                 in.close();
@@ -183,13 +175,12 @@ int main()
                 rename("temp.txt", "movielist.txt");
                 puts("file deleted successfully");
                 }
+    }
+};
 
-        break;
-        }
-
-        case 4:
-
-            {
+class ViewList{
+public:
+    void ViewMovieList(){
             fstream moviefile;
             moviefile.open("movielist.txt", ios::in);
 
@@ -220,8 +211,54 @@ int main()
                 }
 
             moviefile.close();
+    }
+};
 
-        break;
+int main()
+{
+    cout << "Hello there! Welcome to the movie database project!"<<endl;
+
+    char repeat = 'y';
+    while( repeat == 'y'){
+
+    ViewList VList;
+    Delete Del;
+    ViewInfo View;
+    AddMovie Add;
+    UserDecisions UD;
+
+    cout << "\nWhat would you like to do? \n'1'-add a movie, \n'2'-view info about a specific, existing movie, \n'3'-delete a movie entry, \n'4'-view a list of all existing movies, \n'5'-exit program.\n";
+
+    cin >> UD.choice;
+    cin.ignore();
+
+    switch(UD.choice){
+
+        case 1: //ADD A MOVIE
+
+            {
+            Add.AddAMovie();
+            break;
+            }
+        case 2: //VIEW INFO
+
+            {
+            View.ViewMovieInfo();
+            break;
+            }
+
+        case 3: //DELETE ENTRY
+
+            {
+            Del.DeleteEntry();
+            break;
+        }
+
+        case 4:
+
+            {
+            VList.ViewMovieList();
+            break;
         }
 
         case 5:{return 0;}
@@ -230,8 +267,7 @@ int main()
 
     }
 
-    cout<< "\n\nDo you want to repeat? (y/n):";
+    cout<< "\n\nDo you want to start again? (y/n):";
     cin>> repeat;
   }
-
 return 0;}
