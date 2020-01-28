@@ -32,7 +32,7 @@ public:
 
 class UserDecisions{
 public:
-    int choice=0;
+    char choice;
     char descchoice;
     int NoActors=0;
 };
@@ -247,34 +247,34 @@ int main()
 
     switch(UD.choice){
 
-        case 1: //ADD A MOVIE
+        case '1': //ADD A MOVIE
 
             {
             Add.AddAMovie();
             break;
             }
-        case 2: //VIEW INFO
+        case '2': //VIEW INFO
 
             {
             View.ViewMovieInfo();
             break;
             }
 
-        case 3: //DELETE ENTRY
+        case '3': //DELETE ENTRY
 
             {
             Del.DeleteEntry();
             break;
         }
 
-        case 4:
+        case '4':
 
             {
             VList.ViewMovieList();
             break;
         }
 
-        case 5:{return 0;}
+        case '5':{return 0;}
 
         default: cout<<"that's not an allowed choice, restart and try again!"<<endl;
 
