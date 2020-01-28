@@ -54,7 +54,7 @@ public:
 
             fstream moviefile;
             moviefile.open(finalname().c_str(), ios::in);
-
+        try{
             if (!moviefile)
             {
             moviefile.close();
@@ -126,7 +126,10 @@ public:
             moviefile.close();
             }
 
-            else{cout<<"file already exists, you can view info about it by selecting '2'";}
+            else{throw "file already exists, you can view info about it by selecting '2'";}}
+            catch (const char* msg) {
+                cerr << msg << endl;
+            }
 }
 };
 
