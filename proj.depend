@@ -1,0 +1,28 @@
+# depslib dependency file v1.0
+1580471096 source:c:\users\szymon\onedrive\desktop\cpppppp\projekt\librarytemp\proj\database.cpp
+	"Database.h"
+
+1580458887 c:\users\szymon\onedrive\desktop\cpppppp\projekt\librarytemp\proj\database.h
+	<iostream>
+	<string>
+	<fstream>
+	<list>
+	"FileName.h"
+	"MovieInfo.h"
+
+1580409442 c:\users\szymon\onedrive\desktop\cpppppp\projekt\librarytemp\proj\filename.h
+	<iostream>
+
+1580457163 c:\users\szymon\onedrive\desktop\cpppppp\projekt\librarytemp\proj\movieinfo.h
+	<iostream>
+
+1580470873 source:c:\users\szymon\onedrive\desktop\cpppppp\projekt\librarytemp\proj\filename.cpp
+	"FileName.h"
+
+1580470173 source:c:\users\szymon\onedrive\desktop\cpppppp\projekt\librarytemp\proj\main.cpp
+	<iostream>
+	"Database.h"
+
+1580457234 source:c:\users\szymon\onedrive\desktop\cpppppp\projekt\librarytemp\proj\movieinfo.cpp
+	"MovieInfo.h"
+
